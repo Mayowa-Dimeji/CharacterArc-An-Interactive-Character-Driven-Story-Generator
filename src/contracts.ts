@@ -20,3 +20,10 @@ export type BeatResponse = {
   scene: Scene;
   stateDelta: StateDelta;
 };
+export type Edge = {
+  from: string;
+  to: string;
+  choiceId: string;
+  label: string;
+};
+export type StoryGraph = { nodes: Scene[]; edges: Edge[] };
