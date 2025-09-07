@@ -5,11 +5,13 @@ export default function App() {
   return (
     <div>
       <header className="border-b">
-        <div className="container flex items-center justify-between">
-          <Link to="/" className="font-semibold">
-            CharacterArc
-          </Link>
-          <nav className="flex gap-4 text-sm">
+        <div className="container flex items-center justify-between p-4">
+          <div className="text-2xl font-bold py-4">
+            <Link to="/" className="font-semibold ">
+              CharacterArc
+            </Link>
+          </div>
+          <nav className="flex gap-4 text-md">
             <Link
               to="/create"
               className={
@@ -29,7 +31,7 @@ export default function App() {
           </nav>
         </div>
       </header>
-      <main className="container py-6">
+      <main className="container py-6 px-4">
         <Outlet />
       </main>
       <footer className="border-t">

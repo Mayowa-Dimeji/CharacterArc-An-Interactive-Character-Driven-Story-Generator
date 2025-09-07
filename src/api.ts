@@ -1,7 +1,9 @@
 import type { BeatRequest, BeatResponse } from "./contracts";
 
 // Use proxy in dev (""), env base in prod
-const API_BASE = import.meta.env.VITE_API_BASE ?? "";
+const API_BASE =
+  import.meta.env.VITE_API_BASE ??
+  "https://characterarc-backend-production.up.railway.app";
 
 export async function requestBeat(payload: BeatRequest): Promise<BeatResponse> {
   const res = await fetch(`${API_BASE}/api/beat`, {

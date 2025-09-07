@@ -92,7 +92,7 @@ export default function CreateCharacter() {
           </Button>
           <Button
             type="button"
-            className="bg-white text-black border"
+            className=" border"
             onClick={() => {
               reset();
               window.location.reload();

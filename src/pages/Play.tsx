@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useCharacter } from "../CharacterContext"; // or ../useCharacter
@@ -13,6 +12,7 @@ import { addSceneAndEdge, loadGraph, saveGraph } from "../lib/graph";
 const FEAR_WARNING_THRESHOLD = 0.8;
 
 export default function Play() {
+  // ✅ All hooks declared unconditionally and in the same order
   const { character, setCharacter } = useCharacter();
   const [scene, setScene] = useState<Scene | null>(null);
   const [loading, setLoading] = useState(false);
@@ -24,31 +24,30 @@ export default function Play() {
   const mounted = useRef(false);
   const prevSceneRef = useRef<Scene | null>(null);
 
-  if (!character) {
-    return (
-      <div>
-        <p className="mb-4">No character found. Create one first.</p>
-        <Link to="/create" className="underline">
-          Go to Create
-        </Link>
-      </div>
-    );
-  }
+  // lock body scroll when map open (optional UX)
+  useEffect(() => {
+    document.body.style.overflow = mapOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mapOpen]);
 
   const highFear =
-    (character.fears?.[0]?.intensity ?? 0) >= FEAR_WARNING_THRESHOLD;
+    (character?.fears?.[0]?.intensity ?? 0) >= FEAR_WARNING_THRESHOLD;
 
   async function fetchBeat(lastChoice?: Choice) {
+    if (!character) return; // guard
     setLoading(true);
     setError(null);
     try {
       const payload = {
-        state: character!,
+        state: character,
         lastChoice: lastChoice?.id,
         transcript,
         seed,
       };
       const res: BeatResponse = await requestBeat(payload);
+
       setScene(res.scene);
 
       // transcript summary
@@ -56,10 +55,8 @@ export default function Play() {
       setTranscript((t) => [...t, summary]);
 
       // state merge
-      if (character) {
-        const nextState = applyStateDelta(character, res.stateDelta || {});
-        setCharacter(nextState);
-      }
+      const nextState = applyStateDelta(character, res.stateDelta || {});
+      setCharacter(nextState);
 
       // update graph
       setGraph((g) => {
@@ -85,19 +82,21 @@ export default function Play() {
   }
 
   function restart() {
+    if (!character) return;
     setScene(null);
     setTranscript([]);
     prevSceneRef.current = null;
-    setGraph({ nodes: [], edges: [] });
-    saveGraph({ nodes: [], edges: [] });
-    // reset just story history, keep identity
-    setCharacter({ ...(character as any), history: [] });
+    const empty = { nodes: [], edges: [] } as StoryGraph;
+    setGraph(empty);
+    saveGraph(empty);
+    // reset just story history
+    setCharacter({ ...character, history: [] });
     fetchBeat(undefined);
   }
 
-  // first beat + keyboard shortcuts
+  // first beat + keyboard shortcuts — hooks always run, but do nothing if no character yet
   useEffect(() => {
-    if (!mounted.current) {
+    if (!mounted.current && character) {
       mounted.current = true;
       fetchBeat(undefined);
     }
@@ -110,8 +109,9 @@ export default function Play() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scene, loading]);
+  }, [character, scene, loading]);
 
+  // ---------- UI ----------
   return (
     <div className="grid gap-4">
       <div className="flex items-center justify-between">
@@ -120,7 +120,7 @@ export default function Play() {
           <Button type="button" onClick={() => setMapOpen(true)}>
             Open Map
           </Button>
-          <Button type="button" onClick={restart}>
+          <Button type="button" onClick={restart} disabled={!character}>
             Restart
           </Button>
           <Link to="/create" className="underline text-sm self-center">
@@ -129,63 +129,75 @@ export default function Play() {
         </div>
       </div>
 
-      {/* HUD */}
-      <Card>
-        <div className="grid md:grid-cols-3 gap-2 text-sm">
-          <div>
-            👤 <b>{character.name}</b> — {character.archetype}
-          </div>
-          <div>
-            🎯 Goal: <i>{character.goals?.[0]?.text ?? "—"}</i>
-          </div>
-          <div>
-            😟 Fear: <i>{character.fears?.[0]?.text ?? "—"}</i>
-          </div>
-          <div className="md:col-span-3 text-gray-600">
-            Traits: {character.traits.join(", ") || "—"}
-          </div>
-        </div>
-        {highFear && (
-          <div className="mt-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 inline-block">
-            Content note: heightened fear themes in this arc.
-          </div>
-        )}
-      </Card>
-
-      {/* Scene */}
-      <Card>
-        {loading && <p className="animate-pulse">Generating the next beat…</p>}
-        {error && <p className="text-red-600">Error: {error}</p>}
-
-        {!loading && scene && (
-          <div className="grid gap-4">
-            <div className="whitespace-pre-wrap leading-relaxed">
-              {scene.text}
-            </div>
-
-            <div className="flex flex-wrap gap-2">
-              {scene.choices.map((c, idx) => (
-                <Button key={c.id} onClick={() => onChoose(c)}>
-                  {idx + 1}. {c.label}
-                </Button>
-              ))}
-            </div>
-          </div>
-        )}
-      </Card>
-
-      {/* Transcript */}
-      {transcript.length > 0 && (
+      {/* Guard visually, not by returning before hooks */}
+      {!character ? (
         <Card>
-          <div className="text-sm text-gray-600">
-            <div className="font-medium mb-1">Transcript (summary)</div>
-            <ol className="list-decimal ml-5 space-y-1">
-              {transcript.map((s, i) => (
-                <li key={i}>{s}</li>
-              ))}
-            </ol>
-          </div>
+          <p className="mb-2">No character found. Create one first.</p>
+          <Link to="/create" className="underline">
+            Go to Create
+          </Link>
         </Card>
+      ) : (
+        <>
+          {/* HUD */}
+          <Card>
+            <div className="grid md:grid-cols-3 gap-2 text-sm">
+              <div>
+                👤 <b>{character.name}</b> — {character.archetype}
+              </div>
+              <div>
+                🎯 Goal: <i>{character.goals?.[0]?.text ?? "—"}</i>
+              </div>
+              <div>
+                😟 Fear: <i>{character.fears?.[0]?.text ?? "—"}</i>
+              </div>
+              <div className="md:col-span-3 text-gray-600">
+                Traits: {character.traits.join(", ") || "—"}
+              </div>
+            </div>
+            {highFear && (
+              <div className="mt-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 inline-block">
+                Content note: heightened fear themes in this arc.
+              </div>
+            )}
+          </Card>
+
+          {/* Scene */}
+          <Card>
+            {loading && (
+              <p className="animate-pulse">Generating the next beat…</p>
+            )}
+            {error && <p className="text-red-600">Error: {error}</p>}
+            {!loading && scene && (
+              <div className="grid gap-4">
+                <div className="whitespace-pre-wrap leading-relaxed">
+                  {scene.text}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {scene.choices.map((c, idx) => (
+                    <Button key={c.id} onClick={() => onChoose(c)}>
+                      {idx + 1}. {c.label}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </Card>
+
+          {/* Transcript */}
+          {transcript.length > 0 && (
+            <Card>
+              <div className="text-sm text-gray-600">
+                <div className="font-medium mb-1">Transcript (summary)</div>
+                <ol className="list-decimal ml-5 space-y-1">
+                  {transcript.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
+                </ol>
+              </div>
+            </Card>
+          )}
+        </>
       )}
 
       {/* Map overlay */}
