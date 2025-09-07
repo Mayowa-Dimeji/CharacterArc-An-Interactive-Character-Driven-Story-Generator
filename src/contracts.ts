@@ -1,0 +1,22 @@
+import type { z } from "zod";
+import { characterSchema } from "./validation";
+
+// Keep frontend in sync with the backend schema
+export type CharacterState = z.infer<typeof characterSchema>;
+
+export type Choice = { id: string; label: string };
+export type Scene = { id: string; text: string; choices: Choice[] };
+
+export type BeatRequest = {
+  state: CharacterState;
+  lastChoice?: string;
+  transcript: string[];
+  seed?: number;
+};
+
+export type StateDelta = Partial<CharacterState> & { historyAppend?: string };
+
+export type BeatResponse = {
+  scene: Scene;
+  stateDelta: StateDelta;
+};
