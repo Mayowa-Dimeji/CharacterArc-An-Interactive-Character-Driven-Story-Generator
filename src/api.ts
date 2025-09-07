@@ -1,7 +1,10 @@
 import type { BeatRequest, BeatResponse } from "./contracts";
 
+// Use proxy in dev (""), env base in prod
+const API_BASE = import.meta.env.VITE_API_BASE ?? "";
+
 export async function requestBeat(payload: BeatRequest): Promise<BeatResponse> {
-  const res = await fetch("/api/beat", {
+  const res = await fetch(`${API_BASE}/api/beat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -12,7 +15,7 @@ export async function requestBeat(payload: BeatRequest): Promise<BeatResponse> {
       const data = await res.json();
       msg = data?.error || msg;
     } catch {
-      // Ignore JSON parse errors
+      /* ignore */
     }
     throw new Error("Beat request failed: " + msg);
   }
