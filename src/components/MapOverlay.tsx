@@ -17,13 +17,12 @@ export default function MapOverlay({ open, onClose, graph, currentId }: Props) {
   if (!open) return null;
 
   return (
-    // Make the whole overlay scrollable
     <div className="fixed inset-0 z-50 bg-black/40 overflow-y-auto">
       {/* vertical padding so content can breathe when scrolling */}
       <div className="min-h-full py-8 px-4 flex items-start justify-center">
         <div className="w-full max-w-4xl">
           <Card>
-            {/* Sticky header so the Close button never scrolls away */}
+            {/* Sticky header */}
             <div className="sticky top-0 bg-white z-10 -mx-4 -mt-4 px-4 pt-4 pb-3 border-b">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Story Map</h2>

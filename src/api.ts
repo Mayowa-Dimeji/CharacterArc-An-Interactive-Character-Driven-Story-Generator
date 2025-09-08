@@ -1,6 +1,5 @@
 import type { BeatRequest, BeatResponse } from "./contracts";
 
-// Use proxy in dev (""), env base in prod
 const API_BASE =
   import.meta.env.VITE_API_BASE ??
   "https://characterarc-backend-production.up.railway.app";

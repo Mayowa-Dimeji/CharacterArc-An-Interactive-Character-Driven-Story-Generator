@@ -42,11 +42,11 @@ export const characterSchema = z.object({
       })
     )
     .min(1),
-  // ✅ REQUIRED at runtime via default; DO NOT add .optional()
+
   relationships: z.array(relationshipSchema).default([]),
   worldview: z.string().min(5),
   growth_theme: z.string().min(3),
-  // ✅ REQUIRED at runtime via default; DO NOT add .optional()
+
   history: z.array(z.string()).default([]),
 });
 

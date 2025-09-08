@@ -1,7 +1,6 @@
 import type { z } from "zod";
 import { characterSchema } from "./validation";
 
-// Keep frontend in sync with the backend schema
 export type CharacterState = z.infer<typeof characterSchema>;
 
 export type Choice = { id: string; label: string };

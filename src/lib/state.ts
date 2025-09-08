@@ -33,7 +33,7 @@ export function applyStateDelta(
 
   // history handling
   next.history = [...(state.history ?? [])];
-  if (delta.history) next.history = [...delta.history]; // full replace if provided
+  if (delta.history) next.history = [...delta.history]; // replace if provided
   if (delta.historyAppend) next.history.push(delta.historyAppend);
 
   return next;

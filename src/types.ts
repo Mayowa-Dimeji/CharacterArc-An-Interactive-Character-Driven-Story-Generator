@@ -3,20 +3,20 @@ export type Trait = string;
 export type Goal = {
   id: string;
   text: string;
-  priority: number; // 1..5
+  priority: number;
 };
 
 export type Fear = {
   id: string;
   text: string;
-  intensity: number; // 0..1
+  intensity: number;
 };
 
 export type Relationship = {
   id: string;
   name: string;
   stance: "ally" | "rival" | "unknown";
-  trust: number; // 0..1
+  trust: number;
 };
 
 export type CharacterState = {
