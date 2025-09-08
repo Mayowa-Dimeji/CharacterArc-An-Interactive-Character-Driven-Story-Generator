@@ -1,69 +1,82 @@
-# React + TypeScript + Vite
+# CharacterArc – Frontend 🎭
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive storytelling web app where user-created characters (with traits, goals, and fears) shape branching AI-generated narratives.  
+Built with **React + TypeScript + Vite**, styled with **Tailwind CSS**, and deployed on **Vercel**.
 
-Currently, two official plugins are available:
+👉 [Live Demo](https://character-arc-ai-gen-git-main-maymejis-projects.vercel.app/)  
+👉 [Backend API Github](https://github.com/Mayowa-Dimeji/CharacterArc-Backend.git)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🧑 **Character Builder** – Define archetype, traits, goals, fears, worldview, and growth theme.
+- 📖 **AI-Generated Beats** – Each choice dynamically influences the next scene.
+- 🗺 **Story Map Overlay** – Visualizes branching story paths and choices.
+- 💾 **Persistent State** – Character + history saved across scenes.
+- 🎨 **Modern UI** – Responsive, polished dashboard using Tailwind components.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 📸 Screenshots
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Dashboard (Character Creation)
+
+![Character Dashboard](/public/assets/dashboard.png)
+
+### Example Beat Response
+
+![AI Beat Example](/public/assets/example-beat.png)
+
+---
+
+## 🚀 Getting Started (Local Development)
+
+1. Clone this repo:
+
+   ```bash
+   git clone https://github.com/Mayowa-Dimeji/CharacterArc-An-Interactive-Character-Driven-Story-Generator.git
+   cd CharacterArc-Frontend
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Run local dev server (with backend running at http://localhost:8000):
+
+   ```bash
+   npm run dev
+   ```
+
+4. Build for production:
+   ```bash
+   npm run build
+   npm run preview
+   ```
+
+---
+
+## 🔗 Environment Variables
+
+Create a `.env.local` (for dev) or `.env.production` file:
+
+```env
+VITE_API_BASE=https://characterarc-backend-production.up.railway.app
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🛠 Tech Stack
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- [React](https://react.dev) + [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev)
+- [Tailwind CSS](https://tailwindcss.com)
+- [React Hook Form](https://react-hook-form.com) + [Zod](https://zod.dev)
+- [Vercel](https://vercel.com) (deployment)
+
+---
+
+---
