@@ -3,7 +3,7 @@
 An interactive storytelling web app where user-created characters (with traits, goals, and fears) shape branching AI-generated narratives.  
 Built with **React + TypeScript + Vite**, styled with **Tailwind CSS**, and deployed on **Vercel**.
 
-👉 [Live Demo](https://character-arc-ai-gen-git-main-maymejis-projects.vercel.app/)  
+👉 [Live Demo](https://character-arc-ai-gen.vercel.app/)  
 👉 [Backend API Github](https://github.com/Mayowa-Dimeji/CharacterArc-Backend.git)
 
 ---
