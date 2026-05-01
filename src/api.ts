@@ -2,7 +2,7 @@ import type { BeatRequest, BeatResponse } from "./contracts";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE ??
-  "https://characterarc-backend-production.up.railway.app";
+  "https://characterarc-backend-1.onrender.com";
 
 export async function requestBeat(payload: BeatRequest): Promise<BeatResponse> {
   const res = await fetch(`${API_BASE}/api/beat`, {
