@@ -8,7 +8,7 @@ import CreateCharacter from "./pages/CreateCharacter";
 import { CharacterProvider } from "./CharacterContext";
 
 import Play from "./pages/Play";
-
+// set up router
 const router = createBrowserRouter([
   {
     path: "/",
